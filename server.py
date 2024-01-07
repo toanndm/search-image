@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS features (
     feature_vector DOUBLE PRECISION[]
 );
 """
-INSERT_PRODUCT = "INSERT INTO features (product_id, image_url, feature_vector) VALUES (%s, %s, %s) RETURNING feature_vector"
+INSERT_PRODUCT = "INSERT INTO features (product_id, image_url, feature_vector) VALUES (%s, %s, %s)"
 SELECT_QUERY = "SELECT feature_vector, product_id FROM features;"
 
 url = "postgres://oedhpqsz:JkxLZcGqBUV7mwYfiRu8AXQO7sWCW7rm@floppy.db.elephantsql.com/oedhpqsz"
@@ -55,9 +55,8 @@ def create():
             with connection.cursor() as cursor:
                 cursor.execute(INSERT_PRODUCT, (product_id, image_url, feature))
                 connection.commit()
-                feature_new = cursor.fetchone()[0]
 
-        return {"feature": feature_new}, 201
+        return {"success": "true"}, 201
     else:
         return {"error": "Failed to download image"}, 500
 
@@ -74,5 +73,4 @@ def index():
         return jsonify({'product_ids': product_ids_res})
 
 if __name__ == "__main__":
-    app.debug = True
-    app.run("0.0.0.0", port=5001)
+    app.run(debug=False, host="0.0.0.0")
