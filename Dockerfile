@@ -1,7 +1,10 @@
-FROM python:3 
+FROM python:3.8
 WORKDIR /app
+
 COPY . /app/
-RUN apt-get update
+
 RUN pip install -r requirements.txt
-EXPOSE 3000
-CMD python ./server.py
+
+EXPOSE 5000
+
+CMD ["python", "./server.py"]
